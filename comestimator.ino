@@ -16,7 +16,7 @@
 
 void setup() {
   Serial.begin(115200);
-  verInfo();
+  print_version();
   strm::cout << "Initializing" << strm::endl;
   measure::setup();
   wire_reciever::setup();
@@ -24,11 +24,11 @@ void setup() {
 }
 
 void loop() {
-  CommandCheck();
+  check_command();
   delay(1);
 }
 
-void verInfo() {
+void print_version() {
   strm::cout << strm::endl
     << "*************************************" << strm::endl
     << "COMEstimator v" << FIRMWARE_VER << strm::endl

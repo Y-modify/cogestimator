@@ -6,29 +6,22 @@
 *************************************/
 
 #include "fake_stream.h"
+#include "measure.h"
 #include <SerialCommand.h>
 
 SerialCommand SCmd;
 
-void ControlInit() {
+void init_control() {
   SCmd.addCommand("get", print_com);
-  SCmd.addCommand("version", verInfo);
+  SCmd.addCommand("version", print_version);
   SCmd.setDefaultHandler(what);
 }
 
 void print_com() {
-  getCentroid();
-
-  for (uint_fast8_t i = 0; i < num_sensors; i++) {
-    strm::cout << i << ": " << values[i] << strm::endl;
-  }
-  strm::cout << "Gxl: " << Gxl << strm::endl;
-  strm::cout << "Gyl: " << Gyl << strm::endl;
-  strm::cout << "Gxr: " << Gxr << strm::endl;
-  strm::cout << "Gyr: " << Gyr << strm::endl;
+  measure::draw_com();
 }
 
-void CommandCheck() {
+void check_command() {
   SCmd.readSerial();
 }
 
