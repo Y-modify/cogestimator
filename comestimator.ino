@@ -6,14 +6,19 @@
   QIO,80,160,4M(1M),Disabled,none,nodemcu,115200~
 *************************************/
 
+
 #include "fake_stream.h"
+#include "wire_reciever.h"
+
 #define FIRMWARE_VER "1.0"
+
 
 void setup() {
   Serial.begin(115200);
   verInfo();
   strm::cout << "Initializing" << strm::endl;
   StabilizationInit();
+  wire_reciever::setup();
   strm::cout << "Complete" << strm::endl;
 }
 
