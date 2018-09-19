@@ -5,6 +5,8 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
+#include "load_cell.h"
+
 namespace measure {
 
 constexpr uint_fast8_t num_sensors = 8;
