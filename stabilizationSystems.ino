@@ -12,13 +12,10 @@ constexpr uint_fast8_t num_sensors = 8;
 constexpr uint_fast8_t dats[num_sensors]  = {13, 5, 7, 11, A0, A2, 3, 9 };
 constexpr uint_fast8_t clks[num_sensors]  = {2,  6, 8, 12, A1, A3, 4, 10};
 // sensor value gains
-constexpr uint_fast8_t gains[num_sensors] = {-1, 1, 1, -1, -1,  1, 1, -1};
+constexpr float gains[num_sensors]        = {-1, 1, 1, -1, -1,  1, 1, -1};
 
-uint_fast8_t offsets[num_sensors] = {};
-
-//values of each sensor
-uint_fast8_t values[num_sensors] = {};
-float valSum = 0;
+Load_cell* sensors[num_sensors] = {};
+float values[num_sensors] = {};
 
 //values of each axis
 float Gxl = 0;
@@ -27,20 +24,14 @@ float Gxr = 0;
 float Gyr = 0;
 
 void StabilizationInit() {
-  for (const auto dat : dats) {
-    pinMode(dat, INPUT);
-  }
-  for (const auto clk : clks) {
-    pinMode(clk, OUTPUT);
-  }
   for (uint_fast8_t i = 0; i < num_sensors; i++) {
-    offsets[i] = read_sensor(clks[i], dats[i], 0);
+    sensors[i] = new Load_cell(dats[i], clks[i]);
   }
 }
 
 void getCentroid() {
   for(uint_fast8_t i = 0; i < num_sensors; i++) {
-    values[i] = gains[i] * read_sensor(clks[i], dats[i], offsets[i]);
+    values[i] = gains[i] * sensors[i]->read();
     valSum += values[i];
   }
 
@@ -149,24 +140,3 @@ void drawCentroid() {
 
 }
 
-
-float read_sensor(int clk, int dat, float offset) {
-  uint_fast32_t data = 0;
-  while (digitalRead(dat) != 0);
-  for (uint_fast8_t i = 0; i < 24; i++) {
-    digitalWrite(clk, 1);
-    delayMicroseconds(1);
-    digitalWrite(clk, 0);
-    delayMicroseconds(1);
-    data = (data << 1) | digitalRead(dat);
-  }
-  digitalWrite(clk, 1); //gain=128
-  delayMicroseconds(1);
-  digitalWrite(clk, 0);
-  delayMicroseconds(1);
-  data = data ^ 0x800000;
-
-  const auto volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
-  const auto gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
-  return gram - offset;
-}
