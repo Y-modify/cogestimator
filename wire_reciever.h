@@ -39,6 +39,8 @@ uint8_t dispatch_address(uint8_t addr, uint8_t value) {
       return command::get_ly(addr - 0x1C);
     case 0x20:
       return command::measure();
+    case 0xff:
+      return command::echo(value);
     default:
       return 0xff;
   }
@@ -81,6 +83,10 @@ uint8_t get_lx(uint8_t idx) {
 
 uint8_t get_ly(uint8_t idx) {
   return (ly_cache >> idx * 8) & 0xFF;
+}
+
+uint8_t echo(uint8_t value) {
+  return value;
 }
 
 };
