@@ -43,7 +43,7 @@ void StabilizationInit() {
     pinMode(clk, OUTPUT);
   }
   for (decltype(num_sensors) i = 0; i < num_sensors; i++) {
-    offsets[i] = Read(clks[i], dats[i], 0);
+    offsets[i] = read_sensor(clks[i], dats[i], 0);
   }
 }
 
@@ -267,7 +267,7 @@ void drawCentroid() {
 }
 
 
-float Read(int clk, int dat, float offset) {
+float read_sensor(int clk, int dat, float offset) {
   uint_fast32_t data = 0;
   while (digitalRead(dat) != 0);
   for (uint_fast8_t i = 0; i < 24; i++) {
