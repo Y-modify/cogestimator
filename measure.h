@@ -5,53 +5,45 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
-#include "load_cell.h"
+#include "cog_estimator.h"
 
 namespace measure {
-
-constexpr uint_fast8_t num_sensors = 8;
 
 // definition of sensor ports
 /* Previously defined as                     A   B  C  D   E   F   G  H */
 constexpr uint_fast8_t dats[num_sensors]  = {13, 5, 7, 11, A0, A2, 3, 9 };
 constexpr uint_fast8_t clks[num_sensors]  = {2,  6, 8, 12, A1, A3, 4, 10};
-// sensor value gains
-constexpr float gains[num_sensors]        = {-1, 1, 1, -1, -1,  1, 1, -1};
 
-Load_cell* sensors[num_sensors] = {};
-float values[num_sensors] = {};
-
-//values of each axis
-float Gxl = 0;
-float Gyl = 0;
-float Gxr = 0;
-float Gyr = 0;
+Cog_estimator* R_estimator = {};
+Cog_estimator* L_estimator = {};
 
 void setup() {
-  for (uint_fast8_t i = 0; i < num_sensors; i++) {
-    sensors[i] = new Load_cell(dats[i], clks[i]);
-  }
-}
-
-void get_com() {
-  for(uint_fast8_t i = 0; i < num_sensors; i++) {
-    values[i] = gains[i] * sensors[i]->read();
-    valSum += values[i];
-  }
-
-  const auto sum_a2d = values[0] + values[1] + values[2] + values[3];
-  const auto sum_e2h = values[4] + values[5] + values[6] + values[7];
-
-  /* Centor of mass -1...1 */
-  Gxl = -1 + 2 * (values[1] + values[3]) / sum_a2d;
-  Gyl = -1 + 2 * (values[0] + values[1]) / sum_a2d;
-  Gxr = -1 + 2 * (values[4] + values[6]) / sum_e2h;
-  Gyr = -1 + 2 * (values[4] + values[5]) / sum_e2h;
+  R_estimator = new Cog_estimator(
+                  new Load_cell(dats[0], clks[0]),
+                  new Load_cell(dats[1], clks[1]),
+                  new Load_cell(dats[2], clks[2]),
+                  new Load_cell(dats[3], clks[3]),
+                )
+  L_estimator = new Cog_estimator(
+                  new Load_cell(dats[4], clks[4]),
+                  new Load_cell(dats[5], clks[5]),
+                  new Load_cell(dats[6], clks[6]),
+                  new Load_cell(dats[7], clks[7]),
+                )
 }
 
 void draw_com() {
   int sizx = 10;//>=2
   int sizy = 10;//>=2
+
+  float valSum = 0;
+  float Gxl;
+  float Gyl;
+  float Gxr;
+  float Gyr;
+  valSum += R_estimator->get_center_of_gravity(&Gxr, &Gyr);
+  valSum += L_estimator->get_center_of_gravity(&Gxl, &Gyl);
+
   int GxlPoint = Gxl * sizx / 2 + sizx / 2;
   int GylPoint = Gyl * sizx / 2 + sizy / 2;
   int GxrPoint = -Gxr * sizx / 2 + sizx / 2;
