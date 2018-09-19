@@ -268,9 +268,9 @@ void drawCentroid() {
 
 
 float Read(int CLK, int DAT, float offset) {
-  long data = 0;
+  uint_fast32_t data = 0;
   while (digitalRead(DAT) != 0);
-  for (char i = 0; i < 24; i++) {
+  for (uint_fast8_t i = 0; i < 24; i++) {
     digitalWrite(CLK, 1);
     delayMicroseconds(1);
     digitalWrite(CLK, 0);
