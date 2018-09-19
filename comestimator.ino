@@ -20,61 +20,15 @@
 /*****System Setup*****/
 void setup() {
   Serial.begin(115200);
-  delay(1000);
-
-  //  print_c("HELLO YamaX %s\n", YAMAX_VER);
-  // delay(500);
   verInfo(); // Print Version Information
-  // delay(500);
-  // print_c("test\n");
   print_c("Initializing...\n");
-  // delay(100);
-  ControlInit(); // Serial Command Control Initialize
-  // delay(100);
-  ServoInit(); // Servo Driver Setup
-  // delay(100);
   StabilizationInit();
-  stand();
-
-  // Start
-
   print_c("Initialization Complete.\n");
-
-  /*   for(int i = 0; i <5; i++)
-     {
-       stand();
-       delay(5000);
-      bow();
-       delay(900);
-       stand();
-       delay(2000);
-       walk(10,300);
-       stand();
-       delay(1000);
-      bye(10);
-       stand();
-       delay(1000);
-       no(5);
-     }*/
-  //  delay(4000);
-  //  walk(10,300);
-  //  stand();
-  // kusoran();
-  // bye(10,0);
-  // bye(10,1);
-  // bye(10,2);
-  // nadenade(10,0);
-  // nadenade(10,1);
-  // walk(10,200);
-  stand();
 }
 
 /*****Waiting Loop*****/
 void loop() {
   CommandCheck();
-  getCentroid();
-  drawCentroid();
-  //stabilization();
   delay(1);
 }
 
