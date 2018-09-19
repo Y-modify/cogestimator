@@ -8,21 +8,16 @@
 constexpr uint_fast8_t num_sensors = 8;
 
 // definition of sensor ports
-/* Previously defined as         A   B  C  D   E   F   G  H */
-constexpr uint_fast8_t dats[num_sensors] = {13, 5, 7, 11, A0, A2, 3, 9 };
-constexpr uint_fast8_t clks[num_sensors] = {2,  6, 8, 12, A1, A3, 4, 10};
+/* Previously defined as                     A   B  C  D   E   F   G  H */
+constexpr uint_fast8_t dats[num_sensors]  = {13, 5, 7, 11, A0, A2, 3, 9 };
+constexpr uint_fast8_t clks[num_sensors]  = {2,  6, 8, 12, A1, A3, 4, 10};
+// sensor value gains
+constexpr uint_fast8_t gains[num_sensors] = {-1, 1, 1, -1, -1,  1, 1, -1};
 
 uint_fast8_t offsets[num_sensors] = {};
 
 //values of each sensor
-float valA = 0;
-float valB = 0;
-float valC = 0;
-float valD = 0;
-float valE = 0;
-float valF = 0;
-float valG = 0;
-float valH = 0;
+uint_fast8_t values[num_sensors] = {};
 float valSum = 0;
 
 //values of each axis
@@ -155,15 +150,10 @@ void resetCentroid() {
 }
 
 void getCentroid() {
-  valA = -Read(CLK_A, DAT_A, offset_A);
-  valB = Read(CLK_B, DAT_B, offset_B);
-  valC = Read(CLK_C, DAT_C, offset_C);
-  valD = -Read(CLK_D, DAT_D, offset_D);
-  valE = -Read(CLK_E, DAT_E, offset_E);
-  valF = Read(CLK_F, DAT_F, offset_F);
-  valG = Read(CLK_G, DAT_G, offset_G);
-  valH = -Read(CLK_H, DAT_H, offset_H);
-  valSum = valA + valB + valC + valD + valE + valF + valG + valH;
+  for(decltype(num_sensors) i = 0; i < num_sensors; i++) {
+    values[i] = gains[i] * read_sensor(clks[i], dats[i], offsets[i]);
+    valSum += values[i];
+  }
 
   Gxl = -1 + 2 * (valB + valD) / (valA + valB + valC + valD); //-1~1
   Gyl = -1 + 2 * (valA + valB) / (valA + valB + valC + valD); //-1~1
