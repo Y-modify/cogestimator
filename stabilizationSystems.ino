@@ -5,23 +5,10 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
-//definition of sensor pins
-#define DAT_A 13
-#define CLK_A 2
-#define DAT_B 5
-#define CLK_B 6
-#define DAT_C 7
-#define CLK_C 8
-#define DAT_D 11
-#define CLK_D 12
-#define DAT_E A0
-#define CLK_E A1
-#define DAT_F A2
-#define CLK_F A3
-#define DAT_G 3
-#define CLK_G 4
-#define DAT_H 9
-#define CLK_H 10
+// definition of sensor ports
+/* Previously defined as         A   B  C  D   E   F   G  H */
+constexpr uint_fast8_t dats[] = {13, 5, 7, 11, A0, A2, 3, 9 };
+constexpr uint_fast8_t clks[] = {2,  6, 8, 12, A1, A3, 4, 10};
 
 //offset of sensorvalue
 float offset_A = 0;
