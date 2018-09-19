@@ -5,20 +5,14 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
+constexpr uint_fast8_t num_sensors = 8;
+
 // definition of sensor ports
 /* Previously defined as         A   B  C  D   E   F   G  H */
-constexpr uint_fast8_t dats[] = {13, 5, 7, 11, A0, A2, 3, 9 };
-constexpr uint_fast8_t clks[] = {2,  6, 8, 12, A1, A3, 4, 10};
+constexpr uint_fast8_t dats[num_sensors] = {13, 5, 7, 11, A0, A2, 3, 9 };
+constexpr uint_fast8_t clks[num_sensors] = {2,  6, 8, 12, A1, A3, 4, 10};
 
-//offset of sensorvalue
-float offset_A = 0;
-float offset_B = 0;
-float offset_C = 0;
-float offset_D = 0;
-float offset_E = 0;
-float offset_F = 0;
-float offset_G = 0;
-float offset_H = 0;
+constexpr uint_fast8_t offsets[num_sensors] = {};
 
 //values of each sensor
 float valA = 0;
