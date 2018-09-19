@@ -12,7 +12,7 @@ constexpr uint_fast8_t num_sensors = 8;
 constexpr uint_fast8_t dats[num_sensors] = {13, 5, 7, 11, A0, A2, 3, 9 };
 constexpr uint_fast8_t clks[num_sensors] = {2,  6, 8, 12, A1, A3, 4, 10};
 
-constexpr uint_fast8_t offsets[num_sensors] = {};
+uint_fast8_t offsets[num_sensors] = {};
 
 //values of each sensor
 float valA = 0;
