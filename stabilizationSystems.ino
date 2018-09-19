@@ -37,7 +37,7 @@ void StabilizationInit() {
   for (const auto clk : clks) {
     pinMode(clk, OUTPUT);
   }
-  for (decltype(num_sensors) i = 0; i < num_sensors; i++) {
+  for (uint_fast8_t i = 0; i < num_sensors; i++) {
     offsets[i] = read_sensor(clks[i], dats[i], 0);
   }
 }
@@ -150,7 +150,7 @@ void resetCentroid() {
 }
 
 void getCentroid() {
-  for(decltype(num_sensors) i = 0; i < num_sensors; i++) {
+  for(uint_fast8_t i = 0; i < num_sensors; i++) {
     values[i] = gains[i] * read_sensor(clks[i], dats[i], offsets[i]);
     valSum += values[i];
   }
