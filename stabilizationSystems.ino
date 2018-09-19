@@ -268,7 +268,6 @@ void drawCentroid() {
 
 
 float Read(int CLK, int DAT, float offset) {
-  long sum = 0;
   long data = 0;
   while (digitalRead(DAT) != 0);
   for (char i = 0; i < 24; i++) {
@@ -283,9 +282,7 @@ float Read(int CLK, int DAT, float offset) {
   digitalWrite(CLK, 0);
   delayMicroseconds(1);
   data = data ^ 0x800000;
-  sum += data;
 
-  data = 2 * sum / times;
   float volt; float gram;
   volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
   gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
