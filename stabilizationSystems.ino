@@ -5,43 +5,19 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
-//definition of sensor pins
-#define DAT_A 13
-#define CLK_A 2
-#define DAT_B 5
-#define CLK_B 6
-#define DAT_C 7
-#define CLK_C 8
-#define DAT_D 11
-#define CLK_D 12
-#define DAT_E A0
-#define CLK_E A1
-#define DAT_F A2
-#define CLK_F A3
-#define DAT_G 3
-#define CLK_G 4
-#define DAT_H 9
-#define CLK_H 10
+constexpr uint_fast8_t num_sensors = 8;
 
-//offset of sensorvalue
-float offset_A = 0;
-float offset_B = 0;
-float offset_C = 0;
-float offset_D = 0;
-float offset_E = 0;
-float offset_F = 0;
-float offset_G = 0;
-float offset_H = 0;
+// definition of sensor ports
+/* Previously defined as                     A   B  C  D   E   F   G  H */
+constexpr uint_fast8_t dats[num_sensors]  = {13, 5, 7, 11, A0, A2, 3, 9 };
+constexpr uint_fast8_t clks[num_sensors]  = {2,  6, 8, 12, A1, A3, 4, 10};
+// sensor value gains
+constexpr uint_fast8_t gains[num_sensors] = {-1, 1, 1, -1, -1,  1, 1, -1};
+
+uint_fast8_t offsets[num_sensors] = {};
 
 //values of each sensor
-float valA = 0;
-float valB = 0;
-float valC = 0;
-float valD = 0;
-float valE = 0;
-float valF = 0;
-float valG = 0;
-float valH = 0;
+uint_fast8_t values[num_sensors] = {};
 float valSum = 0;
 
 //values of each axis
@@ -55,30 +31,15 @@ float Gyr = 0;
 
 
 void StabilizationInit() {
-  pinMode(CLK_A, OUTPUT);
-  pinMode(DAT_A, INPUT);
-  pinMode(CLK_B, OUTPUT);
-  pinMode(DAT_B, INPUT);
-  pinMode(CLK_C, OUTPUT);
-  pinMode(DAT_C, INPUT);
-  pinMode(CLK_D, OUTPUT);
-  pinMode(DAT_D, INPUT);
-  pinMode(CLK_E, OUTPUT);
-  pinMode(DAT_E, INPUT);
-  pinMode(CLK_F, OUTPUT);
-  pinMode(DAT_F, INPUT);
-  pinMode(CLK_G, OUTPUT);
-  pinMode(DAT_G, INPUT);
-  pinMode(CLK_H, OUTPUT);
-  pinMode(DAT_H, INPUT);
-  offset_A = Read(CLK_A, DAT_A, 0);
-  offset_B = Read(CLK_B, DAT_B, 0);
-  offset_C = Read(CLK_C, DAT_C, 0);
-  offset_D = Read(CLK_D, DAT_D, 0);
-  offset_E = Read(CLK_E, DAT_E, 0);
-  offset_F = Read(CLK_F, DAT_F, 0);
-  offset_G = Read(CLK_G, DAT_G, 0);
-  offset_H = Read(CLK_H, DAT_H, 0);
+  for (const auto dat : dats) {
+    pinMode(dat, INPUT);
+  }
+  for (const auto clk : clks) {
+    pinMode(clk, OUTPUT);
+  }
+  for (uint_fast8_t i = 0; i < num_sensors; i++) {
+    offsets[i] = read_sensor(clks[i], dats[i], 0);
+  }
 }
 
 
@@ -189,20 +150,19 @@ void resetCentroid() {
 }
 
 void getCentroid() {
-  valA = -Read(CLK_A, DAT_A, offset_A);
-  valB = Read(CLK_B, DAT_B, offset_B);
-  valC = Read(CLK_C, DAT_C, offset_C);
-  valD = -Read(CLK_D, DAT_D, offset_D);
-  valE = -Read(CLK_E, DAT_E, offset_E);
-  valF = Read(CLK_F, DAT_F, offset_F);
-  valG = Read(CLK_G, DAT_G, offset_G);
-  valH = -Read(CLK_H, DAT_H, offset_H);
-  valSum = valA + valB + valC + valD + valE + valF + valG + valH;
+  for(uint_fast8_t i = 0; i < num_sensors; i++) {
+    values[i] = gains[i] * read_sensor(clks[i], dats[i], offsets[i]);
+    valSum += values[i];
+  }
 
-  Gxl = -1 + 2 * (valB + valD) / (valA + valB + valC + valD); //-1~1
-  Gyl = -1 + 2 * (valA + valB) / (valA + valB + valC + valD); //-1~1
-  Gxr = -1 + 2 * (valE + valG) / (valE + valF + valG + valH); //-1~1
-  Gyr = -1 + 2 * (valE + valF) / (valE + valF + valG + valH); //-1~1
+  const auto sum_a2d = values[0] + values[1] + values[2] + values[3];
+  const auto sum_e2h = values[4] + values[5] + values[6] + values[7];
+
+  /* Centor of mass -1...1 */
+  Gxl = -1 + 2 * (values[1] + values[3]) / sum_a2d;
+  Gyl = -1 + 2 * (values[0] + values[1]) / sum_a2d;
+  Gxr = -1 + 2 * (values[4] + values[6]) / sum_e2h;
+  Gyr = -1 + 2 * (values[4] + values[5]) / sum_e2h;
 }
 
 void drawCentroid() {
@@ -301,30 +261,23 @@ void drawCentroid() {
 }
 
 
-float Read(int CLK, int DAT, float offset) {
-  long sum = 0;
-  int times = 1;
-  long data = 0;
-  for (int i = 0; i < times; i++) {
-    while (digitalRead(DAT) != 0);
-    for (char i = 0; i < 24; i++) {
-      digitalWrite(CLK, 1);
-      delayMicroseconds(1);
-      digitalWrite(CLK, 0);
-      delayMicroseconds(1);
-      data = (data << 1) | (digitalRead(DAT));
-    }
-    digitalWrite(CLK, 1); //gain=128
+float read_sensor(int clk, int dat, float offset) {
+  uint_fast32_t data = 0;
+  while (digitalRead(dat) != 0);
+  for (uint_fast8_t i = 0; i < 24; i++) {
+    digitalWrite(clk, 1);
     delayMicroseconds(1);
-    digitalWrite(CLK, 0);
+    digitalWrite(clk, 0);
     delayMicroseconds(1);
-    data = data ^ 0x800000;
-    sum += data;
+    data = (data << 1) | digitalRead(dat);
   }
-  data = 2 * sum / times;
-  float volt; float gram;
-  volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
-  gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
+  digitalWrite(clk, 1); //gain=128
+  delayMicroseconds(1);
+  digitalWrite(clk, 0);
+  delayMicroseconds(1);
+  data = data ^ 0x800000;
+
+  const auto volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
+  const auto gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
   return gram - offset;
 }
-
