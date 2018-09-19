@@ -155,8 +155,8 @@ void getCentroid() {
     valSum += values[i];
   }
 
-  const sum_a2d = values[0] + values[1] + values[2] + values[3];
-  const sum_e2h = values[4] + values[5] + values[6] + values[7];
+  const auto sum_a2d = values[0] + values[1] + values[2] + values[3];
+  const auto sum_e2h = values[4] + values[5] + values[6] + values[7];
 
   /* Centor of mass -1...1 */
   Gxl = -1 + 2 * (values[1] + values[3]) / sum_a2d;
@@ -277,7 +277,7 @@ float read_sensor(int clk, int dat, float offset) {
   delayMicroseconds(1);
   data = data ^ 0x800000;
 
-  const float volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
-  const float gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
+  const auto volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
+  const auto gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
   return gram - offset;
 }
