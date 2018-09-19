@@ -155,10 +155,14 @@ void getCentroid() {
     valSum += values[i];
   }
 
-  Gxl = -1 + 2 * (valB + valD) / (valA + valB + valC + valD); //-1~1
-  Gyl = -1 + 2 * (valA + valB) / (valA + valB + valC + valD); //-1~1
-  Gxr = -1 + 2 * (valE + valG) / (valE + valF + valG + valH); //-1~1
-  Gyr = -1 + 2 * (valE + valF) / (valE + valF + valG + valH); //-1~1
+  const sum_a2d = values[0] + values[1] + values[2] + values[3];
+  const sum_e2h = values[4] + values[5] + values[6] + values[7];
+
+  /* Centor of mass -1...1 */
+  Gxl = -1 + 2 * (values[1] + values[3]) / sum_a2d;
+  Gyl = -1 + 2 * (values[0] + values[1]) / sum_a2d;
+  Gxr = -1 + 2 * (values[4] + values[6]) / sum_e2h;
+  Gyr = -1 + 2 * (values[4] + values[5]) / sum_e2h;
 }
 
 void drawCentroid() {
