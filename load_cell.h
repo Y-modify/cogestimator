@@ -1,6 +1,8 @@
 namespace measure {
 
 class Load_cell {
+  Load_cell(const Load_cell&) = delete;
+
 public:
   Load_cell(uint_fast8_t dat, uint_fast8_t clk) : dat_pin(dat), clk_pin(clk), offset(0) {
     pinMode(this->dat_pin, INPUT);
