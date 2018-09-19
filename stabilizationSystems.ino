@@ -293,4 +293,3 @@ float Read(int CLK, int DAT, float offset) {
   gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
   return gram - offset;
 }
-
