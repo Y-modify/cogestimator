@@ -1,3 +1,6 @@
+#ifndef COG_ESTIMATOR_WIRE_RECIEVER_H_
+#define COG_ESTIMATOR_WIRE_RECIEVER_H_
+
 #include <Wire.h>
 
 namespace wire_reciever {
@@ -36,3 +39,5 @@ uint8_t who_am_i() {
 };
 
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef COG_ESTIMATOR_FAKE_STREAM_H_
+#define COG_ESTIMATOR_FAKE_STREAM_H_
+
 namespace strm {
 
 struct my_stream_tag{};
@@ -12,3 +15,5 @@ static constexpr my_stream_tag cout;
 static constexpr auto endl = '\n';
 
 };
+
+#endif

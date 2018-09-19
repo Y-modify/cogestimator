@@ -1,3 +1,6 @@
+#ifndef COG_ESTIMATOR_COG_ESTIMATOR_H_
+#define COG_ESTIMATOR_COG_ESTIMATOR_H_
+
 #include "load_cell.h"
 
 namespace measure {
@@ -25,4 +28,6 @@ private:
   Load_cell* cell_b;
   Load_cell* cell_c;
   Load_cell* cell_d;
-}
+};
+
+#endif

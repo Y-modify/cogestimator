@@ -1,3 +1,6 @@
+#ifndef COG_ESTIMATOR_LOAD_CELL_H_
+#define COG_ESTIMATOR_LOAD_CELL_H_
+
 namespace measure {
 
 class Load_cell {
@@ -39,3 +42,6 @@ private:
 };
 
 };
+
+
+#endif

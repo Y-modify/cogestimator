@@ -1,9 +1,5 @@
-/*************************************
-  Controls - YamaX Arduino Core v3.0
-  stabilization controlling block
-  made by coord.e, Y-modify
-  Copyright © 2017 Y-modify All Rights Reserved.
-*************************************/
+#ifndef COG_ESTIMATOR_MEASURE_H_
+#define COG_ESTIMATOR_MEASURE_H_
 
 #include "cog_estimator.h"
 
@@ -137,3 +133,5 @@ void draw_com() {
 }
 
 };
+
+#endif
