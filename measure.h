@@ -48,7 +48,7 @@ void draw_com() {
   int GyrPoint = Gyr * sizx / 2 + sizy / 2;
   /*  for (int i = 0; i < sizx - 2; i++)
       print_c("");*/
-  print_c("left front right\n");
+  strm::cout << "left front right" << strm::endl;
 
   for (int i = sizy; i > 0; i--) //列の管理
   {
@@ -57,81 +57,37 @@ void draw_com() {
       if (j == GxlPoint)
       {
         if (i == GylPoint)
-          print_c("*");
+          strm::cout << "*";
         else
-          print_c("-");
+          strm::cout << "-";
       } else
       {
-        print_c("-");
+        strm::cout << "-";
       }
     }
 
-    print_c("  ");
+    strm::cout << "  ";
 
     for (int j = 0; j < sizx; j++)//右脚行の描画
     {
       if (j == GxrPoint)
       {
         if (i == GyrPoint)
-          print_c("*");
+          strm::cout << "*";
         else
-          print_c("-");
+          strm::cout << "-";
       } else
       {
-        print_c("-");
+        strm::cout << "-";
       }
     }
 
 
-    print_c("\n");
+    strm::cout << strm::endl;
 
   }
 
-  //print_c("Gxl=%s\tGyl=%s\tGxr=%s\tGyr=%s\n",Gxl,Gyl,Gxr,Gyr);
-  //Serial.print("Gxl= ");
-  Serial.print(Gxl);
-  Serial.print("\t");
-  //Serial.print("\t Gyl= ");
-  Serial.print(Gyl);
-  Serial.print("\t");
-  //Serial.print("\t Gxr= ");
-  Serial.print(Gxr);
-  Serial.print("\t");
-  //Serial.print("\t Gyr= ");
-  Serial.print(Gyr);
-  Serial.print("\t");
-  Serial.print(valSum);
-  Serial.println("");
-  /*
-        Serial.print("GxlPoint=");
-        Serial.print(GxlPoint);
-        Serial.print("\t GylPoint=");
-        Serial.print(GylPoint);
-        Serial.print("\t GxrPoint=");
-        Serial.print(GxrPoint);
-        Serial.print("\t GyrPoint=");
-        Serial.print(GyrPoint);
-        Serial.println("");
-  */
-   /* Serial.print(valA);
-    Serial.print("\t");
-    Serial.print(valB);
-    Serial.print("\t");
-    Serial.print(valC);
-    Serial.print("\t");
-    Serial.print(valD);
-    Serial.print("\t");
-    Serial.print(valE);
-    Serial.print("\t");
-    Serial.print(valF);
-    Serial.print("\t");
-    Serial.print(valG);
-    Serial.print("\t");
-    Serial.print(valH);*/
-
-  Serial.println("");
-  Serial.println("");
-
+  strm::cout << Gxl << "\t" << Gyl << "\t" << Gxr << "\t" << Gyr << "\t" << valSum << strm::endl << strm::endl << strm::endl;
 }
 
 };
