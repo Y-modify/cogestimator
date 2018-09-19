@@ -1,3 +1,5 @@
+namespace measure {
+
 class Load_cell {
 public:
   Load_cell(uint_fast8_t dat, uint_fast8_t clk) : dat_pin(dat), clk_pin(clk), offset(0) {
@@ -32,4 +34,6 @@ private:
   uint_fast8_t clk_pin;
 
   float offset;
+};
+
 };
