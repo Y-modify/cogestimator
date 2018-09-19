@@ -5,6 +5,8 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
+namespace measure {
+
 constexpr uint_fast8_t num_sensors = 8;
 
 // definition of sensor ports
@@ -23,13 +25,13 @@ float Gyl = 0;
 float Gxr = 0;
 float Gyr = 0;
 
-void StabilizationInit() {
+void setup() {
   for (uint_fast8_t i = 0; i < num_sensors; i++) {
     sensors[i] = new Load_cell(dats[i], clks[i]);
   }
 }
 
-void getCentroid() {
+void get_com() {
   for(uint_fast8_t i = 0; i < num_sensors; i++) {
     values[i] = gains[i] * sensors[i]->read();
     valSum += values[i];
@@ -45,7 +47,7 @@ void getCentroid() {
   Gyr = -1 + 2 * (values[4] + values[5]) / sum_e2h;
 }
 
-void drawCentroid() {
+void draw_com() {
   int sizx = 10;//>=2
   int sizy = 10;//>=2
   int GxlPoint = Gxl * sizx / 2 + sizx / 2;
@@ -140,3 +142,4 @@ void drawCentroid() {
 
 }
 
+};
