@@ -9,6 +9,7 @@
 
 #include "fake_stream.h"
 #include "wire_reciever.h"
+#include "serial_control.h"
 #include "measure.h"
 
 #define FIRMWARE_VER "1.0"
@@ -19,12 +20,13 @@ void setup() {
   print_version();
   strm::cout << "Initializing" << strm::endl;
   measure::setup();
+  serial_control::setup();
   wire_reciever::setup();
   strm::cout << "Complete" << strm::endl;
 }
 
 void loop() {
-  check_command();
+  serial_control::check_command();
   delay(1);
 }
 

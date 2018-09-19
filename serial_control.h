@@ -1,17 +1,16 @@
-/*************************************
-  Controls - YamaX Arduino Core v3.0
-  Command control block
-  made by coord.e, Y-modify
-  Copyright © 2017 Y-modify All Rights Reserved.
-*************************************/
+#ifndef COG_ESTIMATOR_SERIAL_CONTROL_H_
+#define COG_ESTIMATOR_SERIAL_CONTROL_H_
 
 #include "fake_stream.h"
 #include "measure.h"
 #include <SerialCommand.h>
 
+
+namespace serial_control {
+
 SerialCommand SCmd;
 
-void init_control() {
+void setup() {
   SCmd.addCommand("get", print_com);
   SCmd.addCommand("version", print_version);
   SCmd.setDefaultHandler(what);
@@ -32,3 +31,7 @@ void what() {
 void what(const char *command) {
   strm::cout << "Command" << command << "is not defined" << strm::endl;
 }
+
+};
+
+#endif
