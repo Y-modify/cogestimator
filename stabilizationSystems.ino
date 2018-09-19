@@ -36,30 +36,15 @@ float Gyr = 0;
 
 
 void StabilizationInit() {
-  pinMode(CLK_A, OUTPUT);
-  pinMode(DAT_A, INPUT);
-  pinMode(CLK_B, OUTPUT);
-  pinMode(DAT_B, INPUT);
-  pinMode(CLK_C, OUTPUT);
-  pinMode(DAT_C, INPUT);
-  pinMode(CLK_D, OUTPUT);
-  pinMode(DAT_D, INPUT);
-  pinMode(CLK_E, OUTPUT);
-  pinMode(DAT_E, INPUT);
-  pinMode(CLK_F, OUTPUT);
-  pinMode(DAT_F, INPUT);
-  pinMode(CLK_G, OUTPUT);
-  pinMode(DAT_G, INPUT);
-  pinMode(CLK_H, OUTPUT);
-  pinMode(DAT_H, INPUT);
-  offset_A = Read(CLK_A, DAT_A, 0);
-  offset_B = Read(CLK_B, DAT_B, 0);
-  offset_C = Read(CLK_C, DAT_C, 0);
-  offset_D = Read(CLK_D, DAT_D, 0);
-  offset_E = Read(CLK_E, DAT_E, 0);
-  offset_F = Read(CLK_F, DAT_F, 0);
-  offset_G = Read(CLK_G, DAT_G, 0);
-  offset_H = Read(CLK_H, DAT_H, 0);
+  for (const auto dat : dats) {
+    pinMode(dat, INPUT);
+  }
+  for (const auto clk : clks) {
+    pinMode(clk, OUTPUT);
+  }
+  for (decltype(num_sensors) i = 0; i < num_sensors; i++) {
+    offsets[i] = Read(clks[i], dats[i], 0);
+  }
 }
 
 
