@@ -6,6 +6,7 @@
   QIO,80,160,4M(1M),Disabled,none,nodemcu,115200~
 *************************************/
 
+#include "fake_stream.h"
 #define FIRMWARE_VER "1.0"
 
 void setup() {

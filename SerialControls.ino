@@ -5,6 +5,7 @@
   Copyright © 2017 Y-modify All Rights Reserved.
 *************************************/
 
+#include "fake_stream.h"
 #include <SerialCommand.h>
 
 SerialCommand SCmd;
