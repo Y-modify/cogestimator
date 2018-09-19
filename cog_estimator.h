@@ -30,4 +30,6 @@ private:
   Load_cell* cell_d;
 };
 
+};
+
 #endif
