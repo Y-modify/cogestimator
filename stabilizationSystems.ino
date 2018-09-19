@@ -267,24 +267,23 @@ void drawCentroid() {
 }
 
 
-float Read(int CLK, int DAT, float offset) {
+float Read(int clk, int dat, float offset) {
   uint_fast32_t data = 0;
-  while (digitalRead(DAT) != 0);
+  while (digitalRead(dat) != 0);
   for (uint_fast8_t i = 0; i < 24; i++) {
-    digitalWrite(CLK, 1);
+    digitalWrite(clk, 1);
     delayMicroseconds(1);
-    digitalWrite(CLK, 0);
+    digitalWrite(clk, 0);
     delayMicroseconds(1);
-    data = (data << 1) | (digitalRead(DAT));
+    data = (data << 1) | digitalRead(dat);
   }
-  digitalWrite(CLK, 1); //gain=128
+  digitalWrite(clk, 1); //gain=128
   delayMicroseconds(1);
-  digitalWrite(CLK, 0);
+  digitalWrite(clk, 0);
   delayMicroseconds(1);
   data = data ^ 0x800000;
 
-  float volt; float gram;
-  volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
-  gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
+  const float volt = data * (4.2987 / 16777216.0 / 128); //Serial.println(volt,10);
+  const float gram = volt / (0.000669 * 4.2987 / 200.0); //Serial.println(gram,4);
   return gram - offset;
 }
