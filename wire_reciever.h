@@ -68,7 +68,19 @@ uint8_t who_am_i() {
 }
 
 uint8_t get_rx(uint8_t idx) {
-  return 
+  return (rx_cache >> idx * 8) & 0xFF;
+}
+
+uint8_t get_ry(uint8_t idx) {
+  return (ry_cache >> idx * 8) & 0xFF;
+}
+
+uint8_t get_lx(uint8_t idx) {
+  return (lx_cache >> idx * 8) & 0xFF;
+}
+
+uint8_t get_ly(uint8_t idx) {
+  return (ly_cache >> idx * 8) & 0xFF;
 }
 
 };
