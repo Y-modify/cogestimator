@@ -20,14 +20,14 @@ void setup() {
                   new Load_cell(dats[0], clks[0]),
                   new Load_cell(dats[1], clks[1]),
                   new Load_cell(dats[2], clks[2]),
-                  new Load_cell(dats[3], clks[3]),
-                )
+                  new Load_cell(dats[3], clks[3])
+                );
   L_estimator = new Cog_estimator(
                   new Load_cell(dats[4], clks[4]),
                   new Load_cell(dats[5], clks[5]),
                   new Load_cell(dats[6], clks[6]),
-                  new Load_cell(dats[7], clks[7]),
-                )
+                  new Load_cell(dats[7], clks[7])
+                );
 }
 
 void draw_com() {

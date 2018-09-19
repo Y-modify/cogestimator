@@ -1,50 +1,13 @@
 #ifndef COG_ESTIMATOR_WIRE_RECIEVER_H_
 #define COG_ESTIMATOR_WIRE_RECIEVER_H_
 
+#include "measure.h"
+
 #include <Wire.h>
 
 namespace wire_reciever {
 
-static constexpr i2c_addr = 0x09;
-
-void setup() {
-  Wire.begin(i2c_addr);
-  Wire.onRequest(on_request);
-}
-
-void on_request() {
-  while (!Wire.available());
-  const uint8_t addr = Wire.read();
-  while (!Wire.available());
-  const uint8_t value = Wire.read();
-  const uint8_t ret = dispatch_address(addr, value);
-  Wire.write(ret);
-}
-
-uint8_t dispatch_address(uint8_t addr, uint8_t value) {
-  switch (addr) {
-    case 0x09:
-      return command::who_am_i();
-    case 0x0A:
-    case 0x0B:
-      return command::get_rx(addr - 0x0A);
-    case 0x0C:
-    case 0x0D:
-      return command::get_ry(addr - 0x0C);
-    case 0x1A:
-    case 0x1B:
-      return command::get_lx(addr - 0x1A);
-    case 0x1C:
-    case 0x1D:
-      return command::get_ly(addr - 0x1C);
-    case 0x20:
-      return command::measure();
-    case 0xff:
-      return command::echo(value);
-    default:
-      return 0xff;
-  }
-}
+static constexpr uint8_t i2c_addr = 0x09;
 
 namespace command {
 
@@ -90,6 +53,46 @@ uint8_t echo(uint8_t value) {
 }
 
 };
+
+
+uint8_t dispatch_address(uint8_t addr, uint8_t value) {
+  switch (addr) {
+    case 0x09:
+      return command::who_am_i();
+    case 0x0A:
+    case 0x0B:
+      return command::get_rx(addr - 0x0A);
+    case 0x0C:
+    case 0x0D:
+      return command::get_ry(addr - 0x0C);
+    case 0x1A:
+    case 0x1B:
+      return command::get_lx(addr - 0x1A);
+    case 0x1C:
+    case 0x1D:
+      return command::get_ly(addr - 0x1C);
+    case 0x20:
+      return command::measure();
+    case 0xff:
+      return command::echo(value);
+    default:
+      return 0xff;
+  }
+}
+
+void on_request() {
+  while (!Wire.available());
+  const uint8_t addr = Wire.read();
+  while (!Wire.available());
+  const uint8_t value = Wire.read();
+  const uint8_t ret = dispatch_address(addr, value);
+  Wire.write(ret);
+}
+
+void setup() {
+  Wire.begin(i2c_addr);
+  Wire.onRequest(on_request);
+}
 
 };
 
